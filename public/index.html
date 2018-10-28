@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Evo2 - Now with Paper</title>
+        <link href="styles/evolution.css" rel="stylesheet">
+        <script type="text/javascript" src="scripts/paper-full.min.js"></script>
+        <script type="text/javascript" src="scripts/map-generator.js"></script>
+        <script type="text/javascript" src="scripts/character.js"></script>
+        <script type="text/javascript">
+            window.onload=function() {
+                var canvas = document.getElementById('game-canvas');
+
+                paper.setup(canvas);
+
+                var keys = {
+                    w: false,
+                    a: false,
+                    s: false,
+                    d: false,
+                };
+
+                var pathGen = new mapGenerator();
+
+                var start = new paper.Point(480, 900);
+                var end = new paper.Point(480, 60);
+
+                var path = pathGen.generate(start, end);
+
+                path.smooth();
+
+                path.strokeColor = 'black';
+
+                var character = new Character(start, end);
+
+                paper.view.draw();
+
+                handleKeys = function(event) {
+                    if (!keys.hasOwnProperty(event.key)) {
+                        return;
+                    }
+                    keys[event.key] = event.type == 'keydown';
+                }
+
+                document.addEventListener('keydown', handleKeys);
+                document.addEventListener('keyup', handleKeys);
+
+
+                paper.view.onFrame = function (event) {
+                    character.iterate(keys.w, keys.s, keys.a, keys.d);
+                };
+            }
+        </script>
+    </head>
+    <body>
+        <canvas id="game-canvas" width="960" height="960"></canvas>
+    </body>
+</html>
