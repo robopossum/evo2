@@ -46,6 +46,7 @@
 
                 paper.view.onFrame = function (event) {
                     character.iterate(keys.w, keys.s, keys.a, keys.d);
+                    character.collide(path);
                 };
             }
         </script>
